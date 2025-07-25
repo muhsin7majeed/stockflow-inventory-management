@@ -1,11 +1,11 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, redirect } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/")({
-  component: Index,
+  beforeLoad: async ({ context }) => {
+    if (context.user.isAuthenticated) {
+      throw redirect({ to: "/app" });
+    } else {
+      throw redirect({ to: "/auth/signin" });
+    }
+  },
 });
-
-function Index() {
-  return <div>Index</div>;
-}
-
-export default Route;
