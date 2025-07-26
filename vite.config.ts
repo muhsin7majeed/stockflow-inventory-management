@@ -12,6 +12,6 @@ export default defineConfig({
       autoCodeSplitting: true,
     }),
     react(),
-    tsconfigPaths(),
+    tsconfigPaths({ projects: ['./tsconfig.app.json'] }),
   ],
 });
