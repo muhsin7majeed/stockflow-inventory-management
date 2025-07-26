@@ -1,8 +1,4 @@
-import {
-  createRootRouteWithContext,
-  Link,
-  Outlet,
-} from "@tanstack/react-router";
+import { createRootRouteWithContext, Outlet } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 import { useAuthAtomValue } from "../atoms/authAtom";
 import SidebarWithHeader from "@/components/sidebar-with-header";
@@ -19,32 +15,10 @@ export const Route = createRootRouteWithContext<RootContext>()({
 
     return (
       <>
-        <SidebarWithHeader />
-        <div>
-          <span>Auth: {auth.isAuthenticated ? "true" : "false"}</span>
+        <SidebarWithHeader>
+          <Outlet />
+        </SidebarWithHeader>
 
-          <ul>
-            <li>
-              <Link to="/">Home</Link>
-            </li>
-
-            <li>
-              <Link to="/app">App</Link>
-            </li>
-
-            <li>
-              <Link to="/app/dashboard">Dashboard</Link>
-            </li>
-
-            <li>
-              <Link to="/auth">Auth</Link>
-            </li>
-          </ul>
-        </div>
-
-        <hr />
-
-        <Outlet />
         <TanStackRouterDevtools />
       </>
     );
