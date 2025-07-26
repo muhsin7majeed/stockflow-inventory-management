@@ -1,10 +1,11 @@
+import { useState } from "react";
 import {
   createFileRoute,
   useLocation,
   useNavigate,
+  type ParsedLocation,
 } from "@tanstack/react-router";
-import { useSetAuthAtom } from "../../atoms/authAtom";
-import { useState } from "react";
+import { useSetAuthAtom } from "@/atoms/authAtom";
 
 export const Route = createFileRoute("/auth/signin")({
   component: RouteComponent,
@@ -12,7 +13,7 @@ export const Route = createFileRoute("/auth/signin")({
 
 function RouteComponent() {
   const navigate = useNavigate();
-  const location = useLocation();
+  const location: ParsedLocation<{ redirect: string }> = useLocation();
   const [isLoading, setIsLoading] = useState(false);
   const setAuth = useSetAuthAtom();
 
@@ -26,7 +27,6 @@ function RouteComponent() {
 
       const redirect = location.search.redirect || "/app";
       console.log(redirect);
-      
 
       navigate({ to: redirect });
     }, 1000);

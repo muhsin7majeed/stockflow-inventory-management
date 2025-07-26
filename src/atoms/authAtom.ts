@@ -2,7 +2,7 @@ import { atom, useAtom, useAtomValue, useSetAtom } from "jotai";
 import type { Auth } from "../types/user";
 
 const authAtom = atom<Auth>({
-  isAuthenticated: false,
+  isAuthenticated: true,
 });
 
 export const useAuthAtomValue = () => useAtomValue(authAtom);
