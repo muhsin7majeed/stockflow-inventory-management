@@ -14,7 +14,6 @@ import {
   Avatar,
   Portal,
   Button,
-  Link as ChakraLink,
 } from "@chakra-ui/react";
 import {
   FiSettings,
@@ -87,19 +86,10 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
       </Flex>
 
       {LinkItems.map((link) => {
-        const isActive = matchRoute({ to: link.path });
+        const isActive = matchRoute({ to: link.path }) as boolean;
 
         return (
-          <Link
-            to={link.path}
-            key={link.name}
-            activeProps={{
-              style: {
-                // backgroundColor: "var(--chakra-colors-gray-400)",
-                // color: "white",
-              },
-            }}
-          >
+          <Link to={link.path} key={link.name}>
             <NavItem icon={link.icon} isActive={isActive}>
               {link.name}
             </NavItem>
