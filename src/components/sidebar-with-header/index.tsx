@@ -14,12 +14,9 @@ import {
   Avatar,
   Portal,
   Button,
+  Link as ChakraLink,
 } from "@chakra-ui/react";
 import {
-  FiHome,
-  FiTrendingUp,
-  FiCompass,
-  FiStar,
   FiSettings,
   FiMenu,
   FiBell,
@@ -34,15 +31,18 @@ import type { IconType } from "react-icons";
 import { useColorModeValue } from "../ui/color-mode";
 import { useState } from "react";
 import ToggleDarkMode from "../ui/toggle-dark-mode";
+import { Link, useMatchRoute } from "@tanstack/react-router";
 
 interface LinkItemProps {
   name: string;
   icon: IconType;
+  path: string;
 }
 
 interface NavItemProps extends FlexProps {
   icon: IconType;
   children: React.ReactNode;
+  isActive: boolean;
 }
 
 interface MobileProps extends FlexProps {
@@ -54,15 +54,17 @@ interface SidebarProps extends BoxProps {
 }
 
 const LinkItems: Array<LinkItemProps> = [
-  { name: "Dashboard", icon: FiGrid },
-  { name: "Products", icon: FiPackage },
-  { name: "Categories", icon: FiTag },
-  { name: "Orders", icon: FiShoppingCart },
-  { name: "Users", icon: FiUsers },
-  { name: "Settings", icon: FiSettings },
+  { name: "Dashboard", icon: FiGrid, path: "/app/dashboard" },
+  { name: "Products", icon: FiPackage, path: "/app/products" },
+  { name: "Categories", icon: FiTag, path: "/app/categories" },
+  { name: "Orders", icon: FiShoppingCart, path: "/app/orders" },
+  { name: "Users", icon: FiUsers, path: "/app/users" },
+  { name: "Settings", icon: FiSettings, path: "/app/settings" },
 ];
 
 const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
+  const matchRoute = useMatchRoute();
+
   return (
     <Box
       transition="3s ease"
@@ -84,22 +86,33 @@ const SidebarContent = ({ onClose, ...rest }: SidebarProps) => {
         <CloseButton display={{ base: "flex", md: "none" }} onClick={onClose} />
       </Flex>
 
-      {LinkItems.map((link) => (
-        <NavItem key={link.name} icon={link.icon}>
-          {link.name}
-        </NavItem>
-      ))}
+      {LinkItems.map((link) => {
+        const isActive = matchRoute({ to: link.path });
+
+        return (
+          <Link
+            to={link.path}
+            key={link.name}
+            activeProps={{
+              style: {
+                // backgroundColor: "var(--chakra-colors-gray-400)",
+                // color: "white",
+              },
+            }}
+          >
+            <NavItem icon={link.icon} isActive={isActive}>
+              {link.name}
+            </NavItem>
+          </Link>
+        );
+      })}
     </Box>
   );
 };
 
-const NavItem = ({ icon, children, ...rest }: NavItemProps) => {
+const NavItem = ({ icon, children, isActive, ...rest }: NavItemProps) => {
   return (
-    <Box
-      as="a"
-      style={{ textDecoration: "none" }}
-      _focus={{ boxShadow: "none" }}
-    >
+    <Box>
       <Flex
         align="center"
         p="4"
@@ -107,8 +120,12 @@ const NavItem = ({ icon, children, ...rest }: NavItemProps) => {
         borderRadius="lg"
         role="group"
         cursor="pointer"
+        bg={
+          isActive ? useColorModeValue("gray.200", "gray.700") : "transparent"
+        }
+        color={isActive ? useColorModeValue("gray.900", "gray.100") : "inherit"}
         _hover={{
-          bg: "cyan.400",
+          bg: "gray.400",
           color: "white",
         }}
         {...rest}
@@ -117,6 +134,9 @@ const NavItem = ({ icon, children, ...rest }: NavItemProps) => {
           <Icon
             mr="4"
             fontSize="16"
+            color={
+              isActive ? useColorModeValue("gray.900", "gray.100") : "inherit"
+            }
             _groupHover={{
               color: "white",
             }}
